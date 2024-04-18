@@ -1,6 +1,13 @@
 import { useState } from 'react'
 
+const Button = ({ handleClick, text}) => (
+  <button onClick={handleClick}>
+    {text}
+  </button>
+)
+
 const App = () => {
+  // taking a series of anecdotes and storing them
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -13,10 +20,50 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [numberOfVotes, setVoteCount] = useState({})
+
+  const addVote = () => {
+    setVoteCount(prevVoteCount => ({
+      ...prevVoteCount,
+      [selected]: (prevVoteCount[selected] || 0) + 1
+      })
+    )
+  }
+
+  // randomly access an anecdote
+  const randomAnecdote = () => {
+    const newSelection = Math.floor(Math.random() * anecdotes.length)
+    setSelected(newSelection)
+  }
+
+  // Find the value with the highest votes and return its key
+  const findMaxKey = (obj) => {
+    let maxKey = null
+    let maxValue = 0
+
+    for (const key in obj) {
+      if (obj[key] > maxValue) {
+        maxKey = key;
+        maxValue = obj[key]
+      }
+    }
+    return maxKey
+  }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       {anecdotes[selected]}
+      <br></br>
+      has {numberOfVotes[selected]} votes 
+      <br></br>
+      <Button handleClick={addVote} text="vote"/>
+      <Button handleClick={randomAnecdote} text="next anecdote"/>
+      <br></br>
+      <h1>Anecdote with the most votes</h1>
+      {anecdotes[findMaxKey(numberOfVotes)]}
+      <br></br>
+      has {numberOfVotes[findMaxKey(numberOfVotes)]} votes 
     </div>
   )
 }
