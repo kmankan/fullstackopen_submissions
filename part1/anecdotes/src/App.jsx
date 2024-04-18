@@ -6,6 +6,56 @@ const Button = ({ handleClick, text}) => (
   </button>
 )
 
+// Find the value with the highest votes and return its key
+const findMaxKey = (obj) => {
+  let maxKey = null
+  let maxValue = 0
+
+  for (const key in obj) {
+    if (obj[key] > maxValue) {
+      maxKey = key;
+      maxValue = obj[key]
+    }
+  }
+  return maxKey
+}
+
+const DisplayAnecdote = ({array, obj, index}) => {
+  return (
+    <div>
+      <h1>Anecdote of the day</h1>
+      {array[index]}
+      <br></br>
+      has {obj[index]} votes
+    </div>
+  )
+}
+
+const DisplayMostVotes = ({array, obj}) => {
+    if (Object.keys(obj).length === 0) {
+      return (
+        <div>
+        <h1>Anecdote with the most votes</h1>
+        <br></br>
+        There are no votes yet.
+      </div>
+      )
+    } else {
+      return (
+        <div>
+          <h1>Anecdote with the most votes</h1>
+          {array[findMaxKey(obj)]}
+          <br></br>
+          has {obj[findMaxKey(obj)]} votes
+        </div>
+      )
+    }
+}
+
+const ResetPage = () => {
+    window.location.reload()
+}
+
 const App = () => {
   // taking a series of anecdotes and storing them
   const anecdotes = [
@@ -36,36 +86,21 @@ const App = () => {
     setSelected(newSelection)
   }
 
-  // Find the value with the highest votes and return its key
-  const findMaxKey = (obj) => {
-    let maxKey = null
-    let maxValue = 0
-
-    for (const key in obj) {
-      if (obj[key] > maxValue) {
-        maxKey = key;
-        maxValue = obj[key]
-      }
-    }
-    return maxKey
-  }
-
   return (
     <div>
-      <h1>Anecdote of the day</h1>
-      {anecdotes[selected]}
-      <br></br>
-      has {numberOfVotes[selected]} votes 
+      <DisplayAnecdote array={anecdotes} obj={numberOfVotes} index={selected} /> 
       <br></br>
       <Button handleClick={addVote} text="vote"/>
       <Button handleClick={randomAnecdote} text="next anecdote"/>
       <br></br>
-      <h1>Anecdote with the most votes</h1>
-      {anecdotes[findMaxKey(numberOfVotes)]}
+      <DisplayMostVotes array={anecdotes} obj={numberOfVotes} />
       <br></br>
-      has {numberOfVotes[findMaxKey(numberOfVotes)]} votes 
+      <Button handleClick={ResetPage} text="reset" />
     </div>
-  )
+  ) 
+  // Need to move the most votes section to different component
+  // to allow for the case when there are no votes yet
+
 }
 
 export default App
