@@ -30,4 +30,4 @@ const Filter = ({persons, setFilterText, setFilteredList, value}) => {
 );
 };
 
-export default Filter
+export default Filter;
