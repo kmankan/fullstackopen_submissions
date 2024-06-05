@@ -18,6 +18,7 @@ const findMaxKey = (obj) => {
     }
   }
   return maxKey
+  
 }
 
 const DisplayAnecdote = ({array, obj, index}) => {
@@ -29,6 +30,9 @@ const DisplayAnecdote = ({array, obj, index}) => {
       has {obj[index]} votes
     </div>
   )
+  for (const element of array) {
+    
+  }
 }
 
 const DisplayMostVotes = ({array, obj}) => {
