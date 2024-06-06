@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
+import Contacts from './components/Contacts'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -33,12 +34,7 @@ const App = () => {
     setNewNumber(event.target.value);
   }
 
-  // Map over the filteredList array and render a div for each person
-  const printNames = () => {
-    return filteredList.map((person, index) => (
-      <div key={index}>{person.name} {person.number}</div>
-    ))
-  }
+  
 
   return (
     <div>
@@ -62,12 +58,10 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      ...
-      <div>debug-name: {newName}</div>
-      <div>debug-number: {newNumber}</div>
-      ...
-      <br></br>
-      <div>{printNames()}</div>
+      <Contacts
+      filteredList={filteredList}
+      newName={newName}
+      newNumber={newNumber}/>
     </div>
   )
 }
