@@ -1,3 +1,5 @@
+import contactServices from '../services/contacts'
+
 const PersonForm = ({
   persons, 
   newName, 
@@ -18,11 +20,26 @@ const PersonForm = ({
         setNewName('');
         setNewNumber('');
       } else {
-      // otherwise, update the persons array with the new entry
-        setPersons([...persons, {name: newName, number: newNumber}]);
-        // clear the input fields
-        setNewName('');
-        setNewNumber('');
+        // otherwise, create an object literal with new contact info
+        const contactObject = {
+          name: newName,
+          number: newNumber
+        }
+        // update the db with new contacts info
+        contactServices
+          .create(contactObject)
+          .then(returnedObjects => {
+            // check the correct object was added
+            console.log('returning: ', returnedObjects);
+            //update the persons array with the new entry
+            setPersons([...persons, contactObject]);
+            // clear the input fields
+            setNewName('');
+            setNewNumber('');
+          })
+          .catch(error => {
+            console.log('error: ', error)
+          })
       }
     }
   }

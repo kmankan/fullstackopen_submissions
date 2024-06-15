@@ -14,7 +14,7 @@ const App = () => {
   const [filterText, setFilterText] = useState('');
   // create a copy of the persons array which we can filter with the filterText input
   const [filteredList, setFilteredList] = useState([...persons]);
-
+  const [showAll, setShowAll] = useState(true)
 
   const hook = () => {
     console.log('effect')
@@ -44,6 +44,13 @@ const App = () => {
     setNewNumber(event.target.value);
   }
 
+  const contactsToShow = showAll
+    ? persons
+    : persons.filter(person => person.important)
+
+  const toggleImportanceOf = (id) => {
+    console.log('importance of ' + id + ' needs to be toggled')
+  }
   
 
   return (

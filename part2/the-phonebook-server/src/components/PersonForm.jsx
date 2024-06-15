@@ -1,3 +1,5 @@
+import axios from "axios";
+
 const PersonForm = ({
   persons, 
   newName, 
@@ -18,11 +20,22 @@ const PersonForm = ({
         setNewName('');
         setNewNumber('');
       } else {
-      // otherwise, update the persons array with the new entry
-        setPersons([...persons, {name: newName, number: newNumber}]);
-        // clear the input fields
-        setNewName('');
-        setNewNumber('');
+        // otherwise create a new object with new contact data
+        const personObject = {
+          name: newName,
+          number: newNumber
+        }
+        axios
+          // update the database
+          .post('http://localhost:3001/persons', personObject)
+          .then(response => {
+            console.log(response)
+            // update the persons array with the new entry
+            setPersons([...persons, {name: newName, number: newNumber}]);
+            // clear the input fields
+            setNewName('');
+            setNewNumber('');
+          })
       }
     }
   }
