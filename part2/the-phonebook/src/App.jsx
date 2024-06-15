@@ -64,7 +64,9 @@ const App = () => {
       <Contacts
       filteredList={filteredList}
       newName={newName}
-      newNumber={newNumber}/>
+      newNumber={newNumber}
+      persons={persons}
+      setPersons={setPersons}/>
     </div>
   )
 }
