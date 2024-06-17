@@ -1,6 +1,6 @@
 import RemoveContact from "./Delete";
 
-const Contacts = ({filteredList, newName, newNumber, persons, setPersons}) => {
+const Contacts = ({filteredList, newName, newNumber, persons, setPersons, setNotification, setError}) => {
   // Map over the filteredList array and render a div for each person
   const printNames = () => {
     return filteredList.map((person, index) => (
@@ -11,6 +11,8 @@ const Contacts = ({filteredList, newName, newNumber, persons, setPersons}) => {
         name={person.name}
         setPersons={setPersons}
         persons={persons}
+        setNotification={setNotification}
+        setError={setError}
       />
       </div>
     ))

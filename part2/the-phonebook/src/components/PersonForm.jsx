@@ -7,6 +7,8 @@ const PersonForm = ({
   setNewName, 
   setNewNumber, 
   setPersons, 
+  setNotification,
+  setError,
   handleNameChange, 
   handleNumberChange}) => {
   const addPerson = (event) => {
@@ -21,7 +23,9 @@ const PersonForm = ({
           console.log(matchingContact);
 
           contactServices
-            .update(matchingContact.id, { ...matchingContact, number: newNumber})
+            .update(
+              matchingContact.id, 
+              { ...matchingContact, number: newNumber})
             .then(returnedObjects => {
               // check the correct object was added
               console.log('returning: ', returnedObjects);
@@ -29,11 +33,23 @@ const PersonForm = ({
               setPersons(persons.map(person => 
                 person.id === matchingContact.id ? returnedObjects : person
               ));
+              setNotification(`Updated contact '${newName}'`);
               // clear the input fields
               setNewName('');
               setNewNumber('');
             })
-        }
+            .catch(error => {
+              setError(true);
+              // specific error if user is not in database
+              if (error.response && error.response.status === 404) {
+                setNotification(`${newName} no longer exists in the phonebook`)
+              } else {
+                  // Generic error message
+                  setNotification('An error occurred while trying to update the contact. Please try again.');
+              }
+            });
+        }; 
+
       } else {
           // otherwise, create an object literal with new contact info
           const contactObject = {
@@ -48,15 +64,19 @@ const PersonForm = ({
               console.log('returning: ', returnedObjects);
               //update the persons array with the new entry
               setPersons([...persons, returnedObjects]);
+              // Create notification about event
+              setNotification(`Added new contact '${newName}'`)
               // clear the input fields
               setNewName('');
               setNewNumber('');
             })
             .catch(error => {
               console.log('error: ', error)
+              setNotification('An error occurred while trying to update the contact. Please try again.');
             })
-        }
-      }};
+      };
+    };
+  };
 
   return (
     <form onSubmit={addPerson}>
