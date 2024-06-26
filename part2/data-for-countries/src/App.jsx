@@ -3,20 +3,8 @@ import Filter from './components/Filter';
 import countryQuery from './services/countries';
 import ShowCountryInfo from './components/ShowCountryInfo'
 
-/* 
-What we need to do:
-- store a search value in a state variable -> {country}
-- this state should initially be null
-- use {country} as input to API that queries database for country names
-- store the API data in a state variable -> {countriesFound}
-- whenever {country} updates state, run the API query again and store new countriesFound
-- if the length of {countriesFound} > 10; return too many matches text.
-- if there is 1 < x <= 10, display the {countriesFound} JSON list
-- if there is only 1 result, run another API query with {country}; get full information on target country -> {countryDetails}
-- display information in a particular way with fields language, capital, area and flag image
- */
-
 const App = () => {
+  // an array of all countries that we will use in our query
   let [listOfAllCountries, setListOfAllCountries] = useState([]);
   // store the string we will be querying the database for
   const [country, setCountry] = useState('')
@@ -31,6 +19,7 @@ const App = () => {
       .getAllCountries()
       .then(allCountryInfo => {
         const countryList = allCountryInfo.map(countryInfo => countryInfo.name.common);
+        // query all countries from the API, map over these object and extract just the country name and store in array
         setListOfAllCountries(countryList); // Set state
         console.log('All the countries:', countryList);
     });

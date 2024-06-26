@@ -4,63 +4,63 @@ import Weather from './Weather'
 
 const ShowCountryInfo = ({countriesFound, setCountriesFound, country, countryDetails, setCountryDetails}) => {
 
+  // Fetches specific country details if exactly one country is found
   useEffect(() => {
     if (countriesFound.length === 1) {
       countryQuery.getSpecificCountry(countriesFound[0].toLowerCase())
         .then(countryInfo => {
-          setCountryDetails(countryInfo); // Assuming the API returns an array
+          setCountryDetails(countryInfo); // Update state with API data
         });
     }
-  }, [countriesFound]); // Dependency array
-  
+  }, [countriesFound]); // Effect triggers on change in countriesFound
+
+  // Renders list of countries with a button to show each country's details
   const printListOfCountries = () => {
-    return countriesFound.map((countries, index) => (
+    return countriesFound.map((country, index) => (
       <div key={index}>
-        <p>{countries} <button onClick={() => setCountriesFound([countries])}>show</button></p>
+        <p>{country} <button onClick={() => setCountriesFound([country])}>show</button></p>
       </div>
     ))
   }
 
+  // Conditionally renders details for a specific country if available
   const showSpecificCountryDetails = () => {
-    if (!countryDetails) return null;  // Ensure countryDetails is loaded    
+    if (!countryDetails) return null; // Guard clause for null countryDetails
     return (
-          <div>
-            <h1>{countryDetails.name.common}</h1>
-            capital: {countryDetails.capital[0]}
-            <br></br>
-            population: {countryDetails.population.toLocaleString('en-US')}
-            <br></br>
-            area: {countryDetails.area.toLocaleString('en-US')} km{String.fromCharCode(178)}
-            <br></br>
-            <h2>Languages:</h2> 
-            <ul>
-              {Object.values(countryDetails.languages).map((language, index) => (
-                <li key={index}>
-                  {language}
-                </li>
-              ))
-              }
-            </ul>
+      <div>
+        <h1>{countryDetails.name.common}</h1>
+        capital: {countryDetails.capital[0]}
+        <br></br>
+        population: {countryDetails.population.toLocaleString('en-US')}
+        <br></br>
+        area: {countryDetails.area.toLocaleString('en-US')} km²
+        <br></br>
+        <h2>Languages:</h2>
+        <ul>
+          {Object.values(countryDetails.languages).map((language, index) => (
+            <li key={index}>{language}</li>
+          ))}
+        </ul>
 
-            <img src={countryDetails.flags.png} alt={countryDetails.flags.alt} />
+        <img src={countryDetails.flags.png} alt="country flag" />
 
-            <h2>In {countryDetails.capital[0]}</h2>
-            <Weather 
-            countryDetails={countryDetails}
-            countryName={countryDetails.name.common} 
-            capital={countryDetails.capital[0]}
-            />
-          </div>
-        )
-    }
-  
-  // Show different things based on how many countries match search term
+        <h2>In {countryDetails.capital[0]}</h2>
+        <Weather 
+          countryDetails={countryDetails}
+          countryName={countryDetails.name.common} 
+          capital={countryDetails.capital[0]}
+        />
+      </div>
+    )
+  }
+
+  // Determines render based on the number of countries found
   if (countriesFound.length > 10) {
-    return "too many countries"
+    return "Too many countries"; // Return message for large result sets
   } else if (countriesFound.length <= 10 && countriesFound.length > 1) {
-    return printListOfCountries();
-  } else if (countriesFound.length == 1) {
-    return showSpecificCountryDetails();
+    return printListOfCountries(); // Render list of countries
+  } else if (countriesFound.length === 1) {
+    return showSpecificCountryDetails(); // Render specific country details
   }
 };
 
